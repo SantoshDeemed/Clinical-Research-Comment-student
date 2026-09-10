@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biomedical Research Support — Consultation Request</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --ink: #211d18; --ink-soft: #4a433c; --muted: #85796a;
+    --oxblood: #7a2331; --oxblood-deep: #551621; --brass: #a9823f;
+    --teal: #2f6f6b; --teal-deep: #1f4c49;
+    --parchment: #f4efe4; --paper: #fffdf8;
+    --rule: #ddd0b8; --rule-soft: #ebe3d2; --radius: 3px;
+  }
+  html { -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: var(--parchment); color: var(--ink); font-family: 'Public Sans', Arial, sans-serif; line-height: 1.5; }
+
+  .masthead { text-align: center; padding: 44px 24px 26px; border-bottom: 1px solid var(--rule); }
+  .masthead .mark {
+    width: 34px; height: 34px; margin: 0 auto 14px;
+    border: 1.5px solid var(--brass); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; color: var(--brass);
+  }
+  .masthead h1 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(24px, 4vw, 34px); margin: 0 0 8px; }
+  .masthead p { margin: 0; color: var(--muted); font-size: 14px; font-style: italic; font-family: 'Fraunces', serif; }
+
+  .wrapper { max-width: 1120px; margin: 0 auto; padding: 44px 24px 80px; display: grid; grid-template-columns: 320px 1fr; gap: 46px; align-items: start; }
+  @media (max-width: 860px) { .wrapper { grid-template-columns: 1fr; } }
+
+  .expertise-heading { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .expertise-heading h2 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 500; font-size: 19px; margin: 0; }
+  .expertise-heading span { font-size: 11.5px; color: var(--muted); }
+  .expertise-hint { font-size: 12.5px; color: var(--muted); margin: 6px 0 18px; line-height: 1.5; }
+  .expertise-list { border-top: 1px solid var(--rule); max-height: 640px; overflow-y: auto; }
+
+  .exp-row { display: grid; grid-template-columns: 34px 1fr; gap: 14px; padding: 14px 4px; border-bottom: 1px solid var(--rule-soft);
+    cursor: pointer; text-align: left; background: none; border-left: 3px solid transparent; width: 100%; font-family: inherit;
+    transition: background 0.15s, border-color 0.15s; }
+  .exp-row:hover { background: rgba(122,35,49,0.035); }
+  .exp-row.selected { background: rgba(122,35,49,0.05); border-left-color: var(--oxblood); }
+  .exp-mono { width: 30px; height: 30px; border: 1px solid var(--rule); border-radius: var(--radius); display: flex; align-items: center;
+    justify-content: center; font-family: 'Fraunces', serif; font-size: 12px; font-weight: 500; color: var(--oxblood-deep);
+    background: var(--paper); flex-shrink: 0; margin-top: 1px; }
+  .exp-row.selected .exp-mono { background: var(--oxblood); color: #fff; border-color: var(--oxblood); }
+  .exp-name { font-weight: 600; font-size: 13.5px; margin-bottom: 3px; }
+  .exp-desc { font-size: 11.8px; color: var(--muted); line-height: 1.5; }
+
+  .dossier { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); }
+  .dossier-head { padding: 24px 34px 16px; border-bottom: 1px solid var(--rule); }
+  .dossier-head h2 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 500; font-size: 22px; margin: 0 0 6px; }
+  .dossier-head .routing-note { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 7px; }
+  .dossier-head .routing-note svg { flex-shrink: 0; color: var(--brass); }
+
+  .dossier-body { padding: 28px 34px 34px; }
+
+  .field { display: flex; gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--rule-soft); }
+  .field:first-child { padding-top: 0; }
+  .field-num { width: 22px; height: 22px; border: 1px solid var(--rule); border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 600; color: var(--muted); flex-shrink: 0; margin-top: 2px; }
+  .field-main { flex: 1; min-width: 0; }
+  .field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  @media (max-width: 560px) { .field-row-2 { grid-template-columns: 1fr; gap: 18px; } }
+
+  label { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); margin-bottom: 8px; }
+  label .opt { font-weight: 400; font-style: italic; color: var(--muted); font-family: 'Fraunces', serif; }
+
+  input[type="text"], input[type="tel"], input[type="date"], textarea {
+    width: 100%; border: none; border-bottom: 1.5px solid var(--rule); background: transparent; padding: 6px 2px 9px;
+    font-size: 15px; font-family: 'Public Sans', sans-serif; color: var(--ink); transition: border-color 0.2s;
+  }
+  input:focus, textarea:focus { outline: none; border-bottom-color: var(--oxblood); }
+  textarea { resize: vertical; min-height: 62px; line-height: 1.5; font-family: inherit; }
+  ::placeholder { color: #b8ac9a; }
+
+  .submit-row { margin-top: 30px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  button.book-btn { padding: 13px 30px; background: var(--oxblood); color: #fff; border: none; border-radius: var(--radius);
+    font-size: 14.5px; font-weight: 600; font-family: 'Public Sans', sans-serif; cursor: pointer; transition: background 0.15s; }
+  button.book-btn:hover { background: var(--oxblood-deep); }
+  button.book-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .submit-note { font-size: 12px; color: var(--muted); }
+
+  /* ---------- confirmation screen ---------- */
+  .confirm { display: none; padding: 40px 34px 44px; text-align: center; }
+  .confirm.show { display: block; }
+  .confirm .check { width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid var(--teal); color: var(--teal);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+  .confirm h3 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 500; font-size: 22px; margin: 0 0 8px; }
+  .confirm p { color: var(--muted); font-size: 13.5px; max-width: 440px; margin: 0 auto 22px; line-height: 1.6; }
+  .confirm-summary { text-align: left; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--parchment);
+    padding: 18px 22px; max-width: 460px; margin: 0 auto 22px; font-size: 13px; }
+  .confirm-summary div { padding: 5px 0; border-bottom: 1px solid var(--rule-soft); display: flex; justify-content: space-between; gap: 12px; }
+  .confirm-summary div:last-child { border-bottom: none; }
+  .confirm-summary span.k { color: var(--muted); }
+  .confirm-summary span.v { font-weight: 600; text-align: right; }
+  .confirm-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  a.mail-link { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border: 1px solid var(--rule); border-radius: var(--radius);
+    color: var(--ink); text-decoration: none; font-size: 13px; font-weight: 600; }
+  a.mail-link:hover { border-color: var(--brass); }
+  button.reset-btn { padding: 11px 20px; background: none; border: 1px solid var(--rule); border-radius: var(--radius);
+    font-size: 13px; font-weight: 600; color: var(--ink); cursor: pointer; }
+  button.reset-btn:hover { border-color: var(--oxblood); color: var(--oxblood); }
+
+  footer { text-align: center; padding: 30px 20px 50px; font-size: 11.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="mark">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 12h4l2-7 4 14 2-9 2 2h6"/>
+    </svg>
+  </div>
+  <h1>Biomedical Research Support</h1>
+  <p>Consultation Request</p>
+</div>
+
+<div class="wrapper">
+
+  <aside>
+    <div class="expertise-heading">
+      <h2>Research expertise</h2>
+      <span id="selCount">0 selected</span>
+    </div>
+    <p class="expertise-hint">Areas of research supported by the facility. Select one to prefill your interest area in the form.</p>
+    <div class="expertise-list" id="expertiseList"></div>
+  </aside>
+
+  <main class="dossier">
+
+    <div id="formView">
+      <div class="dossier-head">
+        <h2>Request an appointment</h2>
+        <div class="routing-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          Reviewed by Dr. Shuvojit Moulik, who will route your request to the right faculty member.
+        </div>
+      </div>
+
+      <div class="dossier-body">
+
+        <div class="field">
+          <div class="field-num">1</div>
+          <div class="field-main">
+            <div class="field-row-2">
+              <div><label>Name</label><input type="text" id="pName" placeholder="Full name"></div>
+              <div><label>Mobile number</label><input type="tel" id="pMobile" placeholder="10-digit mobile number"></div>
+            </div>
+            <div class="field-row-2" style="margin-top: 16px;">
+              <div><label>Email address</label><input type="text" id="pEmail" placeholder="you@example.com"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-num">2</div>
+          <div class="field-main">
+            <div class="field-row-2">
+              <div><label>Department</label><input type="text" id="pDept" placeholder="Your department"></div>
+              <div><label>College</label><input type="text" id="pCollege" placeholder="Your college"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-num">3</div>
+          <div class="field-main">
+            <label>Research interest area <span class="opt">(brief description)</span></label>
+            <textarea id="pArea" placeholder="Select an area from the list, or describe your research interest"></textarea>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-num">4</div>
+          <div class="field-main">
+            <div class="field-row-2">
+              <div><label>Date</label><input type="date" id="pDate"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" style="border-bottom: none;">
+          <div class="field-num">5</div>
+          <div class="field-main">
+            <label>Remarks <span class="opt">— optional</span></label>
+            <textarea id="pRemarks" placeholder="Anything else worth noting"></textarea>
+          </div>
+        </div>
+
+        <div class="submit-row">
+          <button class="book-btn" id="bookBtn">Send request</button>
+          <span class="submit-note">Your request is emailed directly to Dr. Shuvojit Moulik.</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="confirmView" class="confirm">
+      <div class="check">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h3>Request sent</h3>
+      <p>Dr. Shuvojit Moulik has received your request and will assign it to the appropriate faculty member. A copy has also been sent to your email as your record.</p>
+      <div class="confirm-summary" id="confirmSummary"></div>
+      <div class="confirm-actions">
+        <a class="mail-link" id="mailFallback" href="#" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg>
+          Open email to Dr. Moulik
+        </a>
+        <button class="reset-btn" id="resetBtn">Submit another request</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>Central Research Facility · Santosh Medical College</footer>
+
+<script>
+// If this page is hosted OUTSIDE Apps Script (e.g. GitHub Pages), set this
+// to your deployment's /exec URL so it can call the backend over fetch().
+const EXEC_URL = "https://script.google.com/macros/s/AKfycbyX9AMFTT7TB-_UnkYsfTcJX7kLDQdavFq94YthTz0dp_MB0IvVgNRwLWUokhKbfOjM/exec";
+
+function callServer(action, payload) {
+  if (typeof google !== 'undefined' && google.script) {
+    // Served directly by Apps Script — use the normal bridge.
+    return new Promise((resolve, reject) => {
+      google.script.run.withSuccessHandler(resolve).withFailureHandler(err => reject(new Error(err.message)))[action](payload);
+    });
+  }
+  // Hosted externally — call the deployed web app as a plain JSON API.
+  return fetch(EXEC_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action, payload })
+  })
+    .then(r => r.json())
+    .then(j => j.ok ? j.result : Promise.reject(new Error(j.result)));
+}
+
+const MOULIK_EMAIL = "shuvojitmoulik.crf@santosh.ac.in";
+
+const expertise = [
+  { name: "Cancer Research", desc: "Cancer biology, cancer-related diseases, treatment approaches, and translation of findings into practical healthcare applications." },
+  { name: "Mental Health Research", desc: "Mental health, psychological well-being, mental health problems, and approaches for improving mental health outcomes." },
+  { name: "Stem Cell Biology", desc: "Stem cells, their biological properties, their role in disease, and their potential use in developing new treatment approaches." },
+  { name: "Brain and Neurodegenerative Disorders", desc: "Diseases affecting the brain and nervous system, including disease mechanisms and new therapeutic approaches." },
+  { name: "In-Vitro Toxicity", desc: "Laboratory-based study of the harmful effects and safety of drugs, chemicals, and other substances using cell or biological models." },
+  { name: "Environmental Toxicology", desc: "Effects of environmental pollutants, chemicals, and other environmental factors on biological systems and human health." },
+  { name: "RNA and Gene Regulation", desc: "RNA, gene regulation, and RNA-based methods used to understand biological processes and disease mechanisms." },
+  { name: "Community Health", desc: "Health problems at the community level, including health needs, risk factors, prevention, and community-based interventions." },
+  { name: "Targeted Therapeutics", desc: "Treatments designed to act on specific disease targets, cells, molecules, or biological pathways for improved outcomes." },
+  { name: "Implantology", desc: "Medical and dental implants, including implant performance, safety, biological response, and clinical applications." },
+  { name: "Autoimmune Diseases", desc: "Diseases in which the immune system attacks the body's own cells or tissues, with a focus on mechanisms and therapeutic approaches." },
+  { name: "Computer-Based Drug Design", desc: "Computer-based identification and design of potential drugs and study of their interaction with biological targets." },
+  { name: "Computational Biology", desc: "Computational methods and biological data analysis to study biological processes, diseases, and drug-related questions." },
+  { name: "Plant-Based Medicine", desc: "Medicinal plants and plant-derived compounds, their biological effects and potential therapeutic applications." },
+  { name: "Traditional Medicine", desc: "Scientific study of traditional medicines, their active components, therapeutic effects, and applications in modern healthcare." },
+  { name: "Therapeutics", desc: "Identifying, developing, and evaluating new treatments and therapeutic approaches for diseases." },
+  { name: "Translational Research", desc: "Connecting laboratory findings with clinical and community applications to support practical healthcare solutions." }
+];
+
+function renderExpertise() {
+  const el = document.getElementById('expertiseList');
+  el.innerHTML = "";
+  expertise.forEach((e, i) => {
+    const row = document.createElement('button');
+    row.className = 'exp-row';
+    row.type = 'button';
+    row.innerHTML = `<div class="exp-mono">${e.name.trim()[0]}</div>
+      <div><div class="exp-name">${e.name}</div><div class="exp-desc">${e.desc}</div></div>`;
+    row.onclick = () => {
+      document.querySelectorAll('.exp-row').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      document.getElementById('selCount').textContent = "1 selected";
+      document.getElementById('pArea').value = `${e.name} — ${e.desc}`;
+    };
+    el.appendChild(row);
+  });
+}
+
+function buildMailtoLink(data) {
+  const subject = encodeURIComponent(`New consultation request — ${data.name}`);
+  const body = encodeURIComponent(
+`A new consultation request has been submitted.
+
+Name: ${data.name}
+Mobile: ${data.mobile}
+Department: ${data.dept}
+College: ${data.college}
+Research interest area: ${data.area}
+Preferred date: ${data.date}
+Remarks: ${data.remarks || '-'}
+
+Please assign this request to the appropriate faculty member.`
+  );
+  return `mailto:${MOULIK_EMAIL}?subject=${subject}&body=${body}`;
+}
+
+document.getElementById('bookBtn').addEventListener('click', () => {
+  const name    = document.getElementById('pName').value.trim();
+  const mobile  = document.getElementById('pMobile').value.trim();
+  const email   = document.getElementById('pEmail').value.trim();
+  const dept    = document.getElementById('pDept').value.trim();
+  const college = document.getElementById('pCollege').value.trim();
+  const area    = document.getElementById('pArea').value.trim();
+  const date    = document.getElementById('pDate').value;
+  const remarks = document.getElementById('pRemarks').value.trim();
+
+  if (!name || !mobile || !email || !dept || !college || !area || !date) {
+    alert("Please complete all required fields.");
+    return;
+  }
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  const bookBtn = document.getElementById('bookBtn');
+  bookBtn.disabled = true;
+  bookBtn.textContent = "Sending…";
+
+  const data = { name, mobile, email, dept, college, area, date, remarks };
+
+  const showConfirmation = () => {
+    document.getElementById('mailFallback').href = buildMailtoLink(data);
+
+    const summary = document.getElementById('confirmSummary');
+    summary.innerHTML = `
+      <div><span class="k">Name</span><span class="v">${name}</span></div>
+      <div><span class="k">Date</span><span class="v">${date}</span></div>
+      <div><span class="k">Interest area</span><span class="v">${area.split(' — ')[0]}</span></div>
+      <div><span class="k">Routed to</span><span class="v">Dr. Shuvojit Moulik</span></div>`;
+
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('confirmView').classList.add('show');
+
+    bookBtn.disabled = false;
+    bookBtn.textContent = "Send request";
+  };
+
+  callServer('bookSlot', data).then(showConfirmation).catch(err => {
+    alert("Something went wrong: " + err.message);
+    bookBtn.disabled = false;
+    bookBtn.textContent = "Send request";
+  });
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  ['pName','pMobile','pDept','pCollege','pArea','pDate','pRemarks'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('.exp-row').forEach(r => r.classList.remove('selected'));
+  document.getElementById('selCount').textContent = "0 selected";
+  document.getElementById('confirmView').classList.remove('show');
+  document.getElementById('formView').style.display = '';
+});
+
+renderExpertise();
+</script>
+</body>
+</html>
