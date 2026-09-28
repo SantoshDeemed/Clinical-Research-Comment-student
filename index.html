@@ -457,6 +457,64 @@
     background: #f6f4ef;
     color: #1d2428;
   }
+  .masthead {
+    background: #f2c94c;
+  }
+  .masthead::after {
+    background: linear-gradient(90deg, rgba(249, 210, 91, 0.95) 0%, rgba(244, 191, 54, 0.82) 48%, rgba(226, 159, 34, 0.48) 100%);
+  }
+  .masthead-copy,
+  .masthead h1,
+  .masthead #movieTitle,
+  .masthead .hero-note,
+  .header-event,
+  .header-event-name {
+    color: #3e2b0c;
+  }
+  .masthead .eyebrow {
+    color: #5d4210;
+  }
+  .masthead .eyebrow::before {
+    background: #5d4210;
+  }
+  .masthead .mark {
+    border-color: rgba(62, 43, 12, 0.55);
+  }
+  .masthead .hero-action {
+    border-color: rgba(62, 43, 12, 0.38);
+    color: #3e2b0c;
+  }
+  .masthead .hero-action.primary {
+    background: #8e2136;
+    border-color: #8e2136;
+    color: #fff;
+  }
+  .masthead .hero-action:hover {
+    background: rgba(255,255,255,0.25);
+    border-color: rgba(62, 43, 12, 0.62);
+  }
+  .masthead .hero-action.primary:hover {
+    background: #681525;
+    border-color: #681525;
+  }
+  .portal-nav a {
+    color: rgba(62, 43, 12, 0.78);
+  }
+  .portal-nav a:hover { color: #3e2b0c; }
+  .header-event-label {
+    color: #8e2136;
+  }
+  .header-event-bullet,
+  .header-event-date {
+    color: #8e2136;
+  }
+  .header-event {
+    border-left-color: rgba(62, 43, 12, 0.4);
+  }
+  @keyframes eventFlash {
+    0%, 100% { color: #8e2136; opacity: 1; }
+    50% { color: #fff; opacity: 0.62; }
+  }
   body::before { opacity: 0.035; }
   .masthead {
     min-height: 500px;
