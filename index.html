@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -710,6 +711,7 @@
   .exp-row.selected .exp-mono { background: #8e2136; border-color: #8e2136; }
   .exp-name { font-size: 12.5px; }
   .exp-desc { font-size: 11px; }
+  .exp-faculty { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: #8e2136; margin-bottom: 3px; }
   .support-heading { margin-top: 38px; }
   .support-heading + .expertise-hint { display: none; }
   .expertise-list-fixed { max-height: none; }
@@ -1030,23 +1032,22 @@ function callServer(action, payload) {
 const MOULIK_EMAIL = "shuvojitmoulik.crf@santosh.ac.in";
 
 const expertise = [
-  { name: "Cancer Research", desc: "Cancer biology, cancer-related diseases, treatment approaches, and translation of findings into practical healthcare applications." },
-  { name: "Stem Cell Biology", desc: "Stem cells, their biological properties, their role in disease, and their potential use in developing new treatment approaches." },
-  { name: "Brain and Neurodegenerative Disorders", desc: "Diseases affecting the brain and nervous system, including disease mechanisms and new therapeutic approaches." },
-  { name: "In-Vitro Toxicity", desc: "Laboratory-based study of the harmful effects and safety of drugs, chemicals, and other substances using cell or biological models." },
-  { name: "Environmental Toxicology", desc: "Effects of environmental pollutants, chemicals, and other environmental factors on biological systems and human health." },
-  { name: "RNA and Gene Regulation", desc: "RNA, gene regulation, and RNA-based methods used to understand biological processes and disease mechanisms." },
-  { name: "Community Health", desc: "Health problems at the community level, including health needs, risk factors, prevention, and community-based interventions." },
-  { name: "Targeted Therapeutics", desc: "Treatments designed to act on specific disease targets, cells, molecules, or biological pathways for improved outcomes." },
-  { name: "Implantology", desc: "Medical and dental implants, including implant performance, safety, biological response, and clinical applications." },
-  { name: "Autoimmune Diseases", desc: "Diseases in which the immune system attacks the body's own cells or tissues, with a focus on mechanisms and therapeutic approaches." },
-  { name: "Computer-Based Drug Design", desc: "Computer-based identification and design of potential drugs and study of their interaction with biological targets." },
-  { name: "Computational Biology", desc: "Computational methods and biological data analysis to study biological processes, diseases, and drug-related questions." },
-  { name: "Plant-Based Medicine", desc: "Medicinal plants and plant-derived compounds, their biological effects and potential therapeutic applications." },
-  { name: "Traditional Medicine", desc: "Scientific study of traditional medicines, their active components, therapeutic effects, and applications in modern healthcare." },
-  { name: "Therapeutics", desc: "Identifying, developing, and evaluating new treatments and therapeutic approaches for diseases." },
-  { name: "Behavioural Health Research", desc: "Mental health, psychological well-being, mental health problems, and approaches for improving mental health outcomes." },
-  { name: "Translational Research", desc: "Connecting laboratory findings with clinical and community applications to support practical healthcare solutions." }
+  { faculty: ["Dr. Shuvojit", "Dr. Sayantani"], name: "Cancer Research", desc: "Cancer biology, cancer-related diseases, treatment approaches, and translation of findings into practical healthcare applications." },
+  { faculty: ["Dr. Abhishek"], name: "Stem Cell Biology", desc: "Stem cells, their biological properties, their role in disease, and their potential use in developing new treatment approaches." },
+  { faculty: ["Dr. Abhishek"], name: "Brain and Neurodegenerative Disorders", desc: "Diseases affecting the brain and nervous system, including disease mechanisms and new therapeutic approaches." },
+  { faculty: ["Dr. Shuvojit", "Dr. Sayantani"], name: "In-Vitro Toxicity", desc: "Laboratory-based study of the harmful effects and safety of drugs, chemicals, and other substances using cell or biological models." },
+  { faculty: ["Dr. Abhishek", "Dr. Sanchaita"], name: "Environmental Toxicology", desc: "Effects of environmental pollutants, chemicals, and other environmental factors on biological systems and human health." },
+  { faculty: ["Dr. Sanchaita", "Dr. Abhishek"], name: "RNA and Gene Regulation", desc: "RNA, gene regulation, and RNA-based methods used to understand biological processes and disease mechanisms." },
+  { faculty: ["Dr. Sayantani", "Dr. Shuvojit"], name: "Community Health", desc: "Health problems at the community level, including health needs, risk factors, prevention, and community-based interventions." },
+  { faculty: ["Dr. Shuvojit", "Dr. Sayantani", "Dr. Abhishek"], name: "Targeted Therapeutics", desc: "Treatments designed to act on specific disease targets, cells, molecules, or biological pathways for improved outcomes." },
+  { faculty: ["Dr. Sanchaita"], name: "Implantology", desc: "Medical and dental implants, including implant performance, safety, biological response, and clinical applications." },
+  { faculty: ["Dr. Sanchaita"], name: "Autoimmune Diseases", desc: "Diseases in which the immune system attacks the body's own cells or tissues, with a focus on mechanisms and therapeutic approaches." },
+  { faculty: ["Dr. Gunjan"], name: "Computer-Based Drug Design", desc: "Computer-based identification and design of potential drugs and study of their interaction with biological targets." },
+  { faculty: ["Dr. Gunjan"], name: "Computational Biology", desc: "Computational methods and biological data analysis to study biological processes, diseases, and drug-related questions." },
+  { faculty: ["Dr. Surbhi", "Dr. Gunjan"], name: "Plant-Based Medicine", desc: "Medicinal plants and plant-derived compounds, their biological effects and potential therapeutic applications." },
+  { faculty: ["Dr. Surbhi", "Dr. Gunjan"], name: "Traditional Medicine", desc: "Scientific study of traditional medicines, their active components, therapeutic effects, and applications in modern healthcare." },
+  { faculty: ["Dr. Shuvojit"], name: "Behavioural Health Research", desc: "Mental health, psychological well-being, mental health problems, and approaches for improving mental health outcomes." },
+  { faculty: ["Dr. Shuvojit"], name: "Transdisciplinary Research", desc: "Research that brings together methods and perspectives from multiple disciplines to address complex biomedical and health problems." }
 ];
 
 const supportServices = [
@@ -1062,7 +1063,7 @@ function renderExpertiseList(items, containerId) {
     row.className = 'exp-row';
     row.type = 'button';
     row.innerHTML = `<div class="exp-mono">${e.name.trim()[0]}</div>
-      <div><div class="exp-name">${e.name}</div><div class="exp-desc">${e.desc}</div></div>`;
+      <div>${e.faculty ? `<div class="exp-faculty">${e.faculty.join(" · ")}</div>` : ""}<div class="exp-name">${e.name}</div><div class="exp-desc">${e.desc}</div></div>`;
     row.onclick = () => {
       document.querySelectorAll('.exp-row').forEach(r => r.classList.remove('selected'));
       row.classList.add('selected');
